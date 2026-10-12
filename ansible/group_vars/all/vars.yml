@@ -1,0 +1,14 @@
+---
+# --- Images DockerHub ---
+dockerhub_username: "dntolo"   # <-- A REMPLACER
+app_tag: "latest"
+
+# --- IP privees (identiques a terraform/infra/ips.tf) ---
+# Pas de noms comme "backend" ici : un conteneur ne les resout pas.
+redis_host: "10.0.2.10"
+postgres_host: "10.0.3.10"
+
+# --- PostgreSQL (valeurs par defaut de ton code : utilisateur et base "postgres") ---
+postgres_user: "postgres"
+postgres_database: "postgres"
+postgres_password: "{{ vault_postgres_password }}"

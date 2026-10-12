@@ -1,0 +1,27 @@
+---
+- name: Base systeme et Docker sur toutes les machines
+  hosts: all
+  become: true
+  roles:
+    - common
+    - docker
+
+# Ordre voulu : la base d'abord (le worker y cree la table "votes"),
+# puis le backend (Redis + Worker), puis le frontend (Vote + Result + nginx).
+- name: Base de donnees PostgreSQL
+  hosts: database
+  become: true
+  roles:
+    - database
+
+- name: Backend (Redis + Worker)
+  hosts: backend
+  become: true
+  roles:
+    - backend
+
+- name: Frontend (Vote, Result, nginx)
+  hosts: frontend
+  become: true
+  roles:
+    - frontend

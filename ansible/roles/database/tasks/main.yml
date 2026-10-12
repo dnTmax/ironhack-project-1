@@ -1,0 +1,21 @@
+---
+- name: Dossier de donnees persistant pour PostgreSQL
+  ansible.builtin.file:
+    path: /data/postgres
+    state: directory
+    mode: "0755"
+
+- name: Conteneur PostgreSQL
+  community.docker.docker_container:
+    name: postgres
+    image: postgres:15-alpine
+    restart_policy: unless-stopped
+    env:
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+      POSTGRES_DB: "{{ postgres_database }}"
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  no_log: true

@@ -1,0 +1,32 @@
+---
+# Redis et Worker sont sur la meme machine : ils se parlent par NOM de conteneur
+# grace a un reseau Docker. Le Worker joint PostgreSQL (autre machine) par IP privee.
+- name: Reseau Docker interne
+  community.docker.docker_network:
+    name: back
+
+- name: Redis
+  community.docker.docker_container:
+    name: redis
+    image: redis:alpine
+    restart_policy: unless-stopped
+    networks:
+      - name: back
+    ports:
+      - "6379:6379"
+
+- name: Worker
+  community.docker.docker_container:
+    name: worker
+    image: "{{ dockerhub_username }}/worker:{{ app_tag }}"
+    pull: true
+    restart_policy: unless-stopped
+    networks:
+      - name: back
+    env:
+      REDIS_HOST: "redis"
+      DB_HOST: "{{ postgres_host }}"
+      DB_USERNAME: "{{ postgres_user }}"
+      DB_PASSWORD: "{{ postgres_password }}"
+      DB_NAME: "{{ postgres_database }}"
+  no_log: true

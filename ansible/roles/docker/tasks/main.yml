@@ -1,0 +1,21 @@
+---
+# docker.io = paquet Docker d'Ubuntu.
+# python3-docker = SDK Python requis sur la CIBLE par les modules community.docker.
+- name: Installer Docker et le SDK Python pour Ansible
+  ansible.builtin.apt:
+    name:
+      - docker.io
+      - python3-docker
+    state: present
+
+- name: Docker demarre et active au boot
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Utilisateur ubuntu dans le groupe docker
+  ansible.builtin.user:
+    name: ubuntu
+    groups: docker
+    append: true

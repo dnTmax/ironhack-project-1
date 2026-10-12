@@ -1,0 +1,15 @@
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
+
+# Clés SSH
+*.pem
+project-key
+project-key.pub
+
+# Ansible
+*.retry
